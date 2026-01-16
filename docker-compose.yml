@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  db:
+    image: docker.io/library/postgres:15
+    container_name: smart_order_postgres
+    environment:
+      POSTGRES_DB: order_processing
+      POSTGRES_USER: order_user
+      POSTGRES_PASSWORD: order_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  postgres_data:
