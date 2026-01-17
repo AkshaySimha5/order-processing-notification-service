@@ -26,7 +26,8 @@ class OrderItemRequest:
 class OrderCreateRequest:
     user_id: int
     items: List[OrderItemRequest]
-    
+    address: str
+
 
 class OrderCreationService:
     @staticmethod
@@ -34,6 +35,10 @@ class OrderCreationService:
     def create_order(request: OrderCreateRequest) -> Order:
         if not request.items:
             raise ValidationError("Order must contain at least one item.")
+
+        # Address is required for order creation (serializer enforces this, defensive check here)
+        if not request.address or not request.address.strip():
+            raise ValidationError("Address is required for order creation.")
 
         try:
             user = User.objects.get(id=request.user_id)
@@ -69,7 +74,7 @@ class OrderCreationService:
             p.inventory -= item.quantity
             p.save(update_fields=["inventory"])
 
-        order = Order.objects.create(user=user)
+        order = Order.objects.create(user=user, address=request.address)
 
         for item in request.items:
             OrderItem.objects.create(

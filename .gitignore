@@ -13,3 +13,7 @@ venv/
 
 # OS
 .DS_Store
+
+
+.vscode/
+local.session.sql

@@ -28,6 +28,7 @@ class CreateOrderAPIView(APIView):
             {
                 "order_id": order.id,
                 "total_amount": order.total_amount,
+                "address": order.address,
             },
             status=status.HTTP_201_CREATED,
         )
@@ -43,4 +44,16 @@ class OrderDetailAPIView(APIView):
             raise PermissionDenied("You do not have permission to view this order.")
 
         serializer = OrderResponseSerializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ListOrdersAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        orders_qs = (
+            Order.objects.filter(user=request.user)
+            .prefetch_related("items")
+        )
+        serializer = OrderResponseSerializer(orders_qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

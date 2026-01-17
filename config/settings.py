@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'orders',
     'payments',
     'notifications',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -157,3 +158,12 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
+
+# Payment provider configuration (set in .env)
+PAYMENT_PROVIDER_API_KEY = os.getenv("PAYMENT_PROVIDER_API_KEY")
+PAYMENT_PROVIDER_BASE_URL = os.getenv("PAYMENT_PROVIDER_BASE_URL", "")
+
+# UroPay specific configuration (set in .env)
+UROPAY_API_KEY = os.getenv("UROPAY_API_KEY")
+UROPAY_SECRET = os.getenv("UROPAY_SECRET")
+UROPAY_BASE_URL = os.getenv("UROPAY_BASE_URL", "https://api.uropay.me")

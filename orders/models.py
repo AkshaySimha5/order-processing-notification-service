@@ -1,7 +1,8 @@
 from decimal import Decimal
+
 from django.conf import settings
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 
 
 class Order(models.Model):
@@ -19,6 +20,9 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         related_name="orders",
     )
+
+    # Shipping / billing address as free-form text. Required at order creation.
+    address = models.TextField(blank=False, default="")
 
     status = models.CharField(
         max_length=20,

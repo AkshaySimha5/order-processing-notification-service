@@ -25,6 +25,7 @@ class OrderItemInputSerializer(serializers.Serializer):
 
 class OrderCreateSerializer(serializers.Serializer):
     items = OrderItemInputSerializer(many=True)
+    address = serializers.CharField(required=True, allow_blank=False)
     def validate_items(self, value):
         if not value:
             raise serializers.ValidationError("Order must contain at least one item.")
@@ -42,6 +43,7 @@ class OrderCreateSerializer(serializers.Serializer):
                 )
                 for item in self.validated_data["items"]
             ],
+            address=self.validated_data["address"],
         )
 
 
@@ -58,4 +60,4 @@ class OrderResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["id", "total_amount", "created_at", "items"]
+        fields = ["id", "total_amount", "created_at", "items", "address"]
