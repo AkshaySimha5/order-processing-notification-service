@@ -167,3 +167,19 @@ PAYMENT_PROVIDER_BASE_URL = os.getenv("PAYMENT_PROVIDER_BASE_URL", "")
 UROPAY_API_KEY = os.getenv("UROPAY_API_KEY")
 UROPAY_SECRET = os.getenv("UROPAY_SECRET")
 UROPAY_BASE_URL = os.getenv("UROPAY_BASE_URL", "https://api.uropay.me")
+
+# Celery / broker config (default to local redis)
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Use your actual Gmail address
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+
+# Use the 16-character App Password (no spaces)
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+# This is what users see in the "From" field
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "webmaster@localhost")

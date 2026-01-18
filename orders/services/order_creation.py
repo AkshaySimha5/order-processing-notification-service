@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 
 from orders.models import Order, OrderItem, Product
+from notifications.tasks import send_notification
 
 
 User = get_user_model()
@@ -86,6 +87,21 @@ class OrderCreationService:
             )
 
         order.recalculate_total()
+
+        # Enqueue notification for order created
+        try:
+            channels = []
+            if getattr(user, 'notify_email', True) and getattr(user, 'email', None):
+                channels.append('EMAIL')
+            if getattr(user, 'notify_sms', False) and getattr(user, 'phone_number', None):
+                channels.append('SMS')
+
+            if channels:
+                unique_key = f"order:{order.pk}:created"
+                send_notification.delay(unique_key, order.id, 'order.created', channels)
+        except Exception:
+            # Notification failure should not block order creation
+            pass
 
         return order
 

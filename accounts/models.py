@@ -15,5 +15,14 @@ class User(AbstractUser):
     # username is already unique in AbstractUser
     # password handling is managed by Django
 
+    # Contact fields and notification preferences
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    notify_email = models.BooleanField(default=True)
+    notify_sms = models.BooleanField(default=False)
+
+    # Verification flags (useful to gate sending SMS/email)
+    email_verified = models.BooleanField(default=False)
+    sms_verified = models.BooleanField(default=False)
+
     def __str__(self) -> str:
         return self.username

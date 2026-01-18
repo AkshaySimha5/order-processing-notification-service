@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Thank you for your order, {{ order.user.first_name|default:"Customer" }}!</h2>
+    <p>We've received your order <strong>#{{ order.id }}</strong> and are currently processing it.</p>
+
+    <table style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="text-align:left; padding: 8px;">Product</th>
+                <th style="text-align:center; padding: 8px;">Qty</th>
+                <th style="text-align:right; padding: 8px;">Price</th>
+                <th style="text-align:right; padding: 8px;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 8px;">{{ item.product_name }}</td>
+                <td style="text-align:center; padding: 8px;">{{ item.quantity }}</td>
+                <td style="text-align:right; padding: 8px;">₹{{ item.price }}</td>
+                <td style="text-align:right; padding: 8px;"><strong>₹{{ item.line_total|floatformat:2 }}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align:right; padding: 8px;"><strong>Grand Total:</strong></td>
+                <td style="text-align:right; padding: 8px;"><strong>₹{{ order.total_amount }}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <p>We will notify you once your payment is confirmed.</p>
+</body>
+</html>

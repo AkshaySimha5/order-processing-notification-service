@@ -15,6 +15,7 @@ import hmac
 from django.utils import timezone
 from payments.models import Payment
 from django.conf import settings
+from notifications.tasks import send_notification
 
 
 class PaymentNotFound(Exception):
@@ -74,6 +75,22 @@ class PaymentService:
 
         order.status = Order.Status.PAID
         order.save(update_fields=["status", "updated_at"])
+
+        # Enqueue notification for payment succeeded
+        try:
+            channels = []
+            if getattr(order.user, 'notify_email', True) and getattr(order.user, 'email', None):
+                channels.append('EMAIL')
+            if getattr(order.user, 'notify_sms', False) and getattr(order.user, 'phone_number', None):
+                channels.append('SMS')
+
+            if channels:
+                unique_key = f"order:{order.id}:payment_succeeded"
+                transaction.on_commit(
+                send_notification.delay(unique_key, order.id, 'payment.succeeded', channels)
+                )
+        except Exception:
+            pass
 
         return payment
 
@@ -157,6 +174,22 @@ class PaymentService:
 
         order.status = Order.Status.PAID
         order.save(update_fields=["status", "updated_at"])
+
+        # Enqueue notification for payment confirmed (webhook/confirm)
+        try:
+            channels = []
+            if getattr(order.user, 'notify_email', True) and getattr(order.user, 'email', None):
+                channels.append('EMAIL')
+            if getattr(order.user, 'notify_sms', False) and getattr(order.user, 'phone_number', None):
+                channels.append('SMS')
+
+            if channels:
+                unique_key = f"order:{order.id}:payment_confirmed"
+                transaction.on_commit(
+                send_notification.delay(unique_key, order.id, 'payment.confirmed', channels)
+                )
+        except Exception:
+            pass
 
         return payment
 

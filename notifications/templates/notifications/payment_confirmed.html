@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family: Arial, sans-serif; color: #333;">
+    <h2 style="color: #2e7d32;">Payment Confirmed!</h2>
+    <p>Great news! Your payment for order <strong>#{{ order.id }}</strong> has been successfully processed.</p>
+
+    <h3>Summary of Charges</h3>
+    <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="background-color: #e8f5e9; border-bottom: 2px solid #4CAF50;">
+                <th style="text-align:left; padding: 12px;">Item</th>
+                <th style="text-align:right; padding: 12px;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 12px;">
+                    {{ item.product_name }} <span style="color: #666;">(x{{ item.quantity }})</span>
+                </td>
+                <td style="text-align:right; padding: 12px;">
+                    ₹{{ item.line_total|floatformat:2 }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td style="text-align:right; padding: 12px;"><strong>Total Paid:</strong></td>
+                <td style="text-align:right; padding: 12px; color: #2e7d32; font-size: 1.1em;">
+                    <strong>₹{{ order.total_amount|floatformat:2 }}</strong>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div style="background-color: #f9f9f9; padding: 15px; border-radius: 4px; border-left: 4px solid #4CAF50;">
+        <p style="margin: 0;"><strong>Reference Number:</strong> {{ payload.reference_number|default:"N/A" }}</p>
+    </div>
+
+    <p style="margin-top: 20px;">Your order is now being prepared for shipment. Thank you for shopping with us!</p>
+</body>
+</html>
