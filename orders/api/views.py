@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
@@ -11,6 +11,7 @@ from orders.services.order_creation import (
 )
 from orders.api.serializers import OrderCreateSerializer, OrderResponseSerializer
 from orders.models import Order
+from config.pagination import StandardResultsPagination
 
 
 class CreateOrderAPIView(APIView):
@@ -47,13 +48,20 @@ class OrderDetailAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ListOrdersAPIView(APIView):
+class ListOrdersAPIView(generics.ListAPIView):
+    """
+    List orders for the authenticated user with pagination.
+    
+    Query params:
+        - page: Page number (default: 1)
+        - page_size: Items per page (default: 10, max: 100)
+    """
     permission_classes = [IsAuthenticated]
+    serializer_class = OrderResponseSerializer
+    pagination_class = StandardResultsPagination
 
-    def get(self, request):
-        orders_qs = (
-            Order.objects.filter(user=request.user)
+    def get_queryset(self):
+        return (
+            Order.objects.filter(user=self.request.user)
             .prefetch_related("items")
         )
-        serializer = OrderResponseSerializer(orders_qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)

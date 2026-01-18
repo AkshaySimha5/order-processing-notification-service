@@ -32,7 +32,7 @@ class OrderCreateSerializer(serializers.Serializer):
         return value
 
     def to_dataclass(self, user_id: int) -> OrderCreateRequest:
-        return OrderCreateRequest(
+        return OrderCreateRequest( # DTO conversion
             user_id=user_id,
             items=[
                 OrderItemRequest(

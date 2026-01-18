@@ -89,6 +89,7 @@ class OrderCreationService:
         order.recalculate_total()
 
         # Enqueue notification for order created
+        # try catch used to ensure order creation is not blocked by notification failures
         try:
             channels = []
             if getattr(user, 'notify_email', True) and getattr(user, 'email', None):

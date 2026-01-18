@@ -21,8 +21,8 @@ class Order(models.Model):
         related_name="orders",
     )
 
-    # Shipping / billing address as free-form text. Required at order creation.
-    address = models.TextField(blank=False, default="")
+    # Shipping / billing address required at order creation
+    address = models.TextField(blank=False)
 
     status = models.CharField(
         max_length=20,
