@@ -13,6 +13,11 @@ class Order(models.Model):
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
         PAID = "PAID", "Paid"
+        # Fulfillment States (Manually set by Admin)
+        PROCESSING = "PROCESSING", "In Processing"
+        SHIPPED = "SHIPPED", "Shipped"
+        DELIVERED = "DELIVERED", "Delivered"
+
         CANCELLED = "CANCELLED", "Cancelled"
 
     user = models.ForeignKey(

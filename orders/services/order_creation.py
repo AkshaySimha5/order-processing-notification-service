@@ -73,7 +73,7 @@ class OrderCreationService:
         for item in request.items:
             p = products_map[item.product_id]
             p.inventory -= item.quantity
-            p.save(update_fields=["inventory"])
+            p.save(update_fields=["inventory"]) # update only inventory column
 
         order = Order.objects.create(user=user, address=request.address)
 
@@ -131,5 +131,5 @@ def load_product_master() -> dict:
                 "price": Decimal(product["price"]),
             }
 
-    cache.set(cache_key, result, None)
+    cache.set(cache_key, result, 86400)  # Cache for 24 hours
     return result
