@@ -1,7 +1,7 @@
 from decimal import Decimal
 from rest_framework import serializers
 
-from orders.models import Order, OrderItem
+from orders.models import Order, OrderItem, Product
 from orders.services.order_creation import (
     OrderCreateRequest,
     OrderItemRequest,
@@ -61,3 +61,14 @@ class OrderResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["id", "total_amount", "created_at", "items", "address"]
+
+
+class ProductListSerializer(serializers.ModelSerializer):
+    """
+    Serializer for listing products.
+    Excludes inventory information for security/business reasons.
+    """
+
+    class Meta:
+        model = Product
+        fields = ["id", "name", "price"]

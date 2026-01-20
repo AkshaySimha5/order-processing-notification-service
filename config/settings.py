@@ -33,7 +33,7 @@ if not SECRET_KEY:
 DEBUG = os.getenv("DEBUG") == "True"
 
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "web", "0.0.0.0"]
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Third-party
     'rest_framework',
     'django_filters',
+    'drf_spectacular',
     # Local apps
     'accounts',
     'orders',
@@ -145,6 +146,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -156,8 +158,15 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
-}
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 
+}
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Order Processing & Notification System API',
+    'DESCRIPTION': 'API documentation for Order Processing and Notification System',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 AUTH_USER_MODEL = "accounts.User"
 
 # Payment provider configuration (set in .env)

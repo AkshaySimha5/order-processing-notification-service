@@ -30,7 +30,7 @@ class AuthAPITests(APITestCase):
     def setUp(self):
         self.register_url = reverse('register')
         self.login_url = reverse('login')
-        self.user_payload = {"username": "apiuser", "password": "securepassword123"}
+        self.user_payload = {"username": "apiuser", "email": "apiuser@example.com", "password": "securepassword123"}
 
     def test_registration_and_token_generation(self):
         """Test registration and getting tokens back."""
@@ -42,6 +42,7 @@ class AuthAPITests(APITestCase):
     def test_login_flow(self):
         """Test if a registered user can log in and get a JWT."""
         User.objects.create_user(**self.user_payload)
-        response = self.client.post(self.login_url, self.user_payload)
+        login_data = {"username": self.user_payload["username"], "password": self.user_payload["password"]}
+        response = self.client.post(self.login_url, login_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access', response.data)

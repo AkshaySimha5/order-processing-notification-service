@@ -9,8 +9,8 @@ from orders.services.order_creation import (
     OrderCreationService,
     OrderCreateRequest,
 )
-from orders.api.serializers import OrderCreateSerializer, OrderResponseSerializer
-from orders.models import Order
+from orders.api.serializers import OrderCreateSerializer, OrderResponseSerializer, ProductListSerializer
+from orders.models import Order, Product
 from config.pagination import StandardResultsPagination
 
 
@@ -65,3 +65,18 @@ class ListOrdersAPIView(generics.ListAPIView):
             Order.objects.filter(user=self.request.user)
             .prefetch_related("items")
         )
+
+
+class ProductListAPIView(generics.ListAPIView):
+    """
+    List available products with pagination.
+    Inventory information is excluded from the response.
+    
+    Query params:
+        - page: Page number (default: 1)
+        - page_size: Items per page (default: 10, max: 100)
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductListSerializer
+    pagination_class = StandardResultsPagination
+    queryset = Product.objects.all()
