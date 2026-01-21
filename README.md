@@ -29,7 +29,6 @@
 - [Testing](#-testing)
 - [Deployment](#-deployment)
 - [Project Structure](#-project-structure)
-- [Contributing](#-contributing)
 
 ---
 
@@ -713,33 +712,4 @@ Order_Processing_Notification_system/
 ├── Makefile                    # Automation commands
 ├── requirements.txt            # Python dependencies
 └── pytest.ini                  # Test configuration
-```
-
 ---
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Code Style
-
-- Follow PEP 8 guidelines
-- Use type hints where applicable
-- Write docstrings for classes and functions
-- Maintain test coverage above 80%
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<p align="center">
-  Made with ❤️ using Django REST Framework
-</p>
