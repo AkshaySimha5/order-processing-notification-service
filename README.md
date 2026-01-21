@@ -712,4 +712,3 @@ Order_Processing_Notification_system/
 ├── Makefile                    # Automation commands
 ├── requirements.txt            # Python dependencies
 └── pytest.ini                  # Test configuration
----
